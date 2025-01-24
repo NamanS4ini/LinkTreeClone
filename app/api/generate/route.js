@@ -5,8 +5,18 @@ export async function POST(req) {
     const client = await clientPromise
     const db = client.db("LinkTree")
     const collection = db.collection("Links")
-
-    await collection.insertOne(body);
     console.log(body);
-    return Response.json({sucess:true})
+    const user = await collection.findOne({handle: body.handle});
+    console.log(user);
+    if (user) {
+        console.log("exists");
+        await collection.findOneAndUpdate({handle: body.handle}, {$set: {link: body.link}});
+        
+    }
+    else{
+        await collection.insertOne(body);
+    }
+
+
+    return Response.json({sucess:true, message:"Link Added"});
 }
