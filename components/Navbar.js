@@ -2,7 +2,7 @@ import React from 'react'
 import Image from 'next/image'
 const Navbar = () => {
   return (
-    <div className='fixed max-w-[1550px] flex pl-12 pr-3 py-3 items-center top-12 justify-between left-[50%] w-[90%] rounded-full translate-x-[-50%] bg-white'>
+    <div className='fixed z-50 max-w-[1550px] flex pl-12 pr-3 py-3 items-center top-12 justify-between left-[50%] w-[90%] rounded-full translate-x-[-50%] bg-white'>
         <div className='flex items-center gap-16'>
         <div>
             <Image width={120} height={120} src="logo.svg" alt="" />

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ToastContainer, Bounce, toast } from "react-toastify";
 const Generate = () => {
   const [Links, setLinks] = useState([{
@@ -8,9 +8,48 @@ const Generate = () => {
   }]);
   const [Handle, setHandle] = useState("")
   const [Pfp, setPfp] = useState("")
+  const [Exists, setExists] = useState(false)
+  const [Claimed, setClaimed] = useState(false)
   const handleSubmit = async () => {
     console.log(Links);
   };
+  const getUser = async () => {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    
+    const raw = JSON.stringify({
+      "handle": Handle,
+    });
+    
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow"
+    };
+    
+    let response = await fetch("http://localhost:3000/api/generate", requestOptions)
+    let data = await response.json()
+    console.log(data.success);
+    if(data.success){
+      setExists(false)
+    }
+    else{
+      setExists(true)
+    }
+
+
+
+  }
+
+  useEffect(() => {
+    getUser()
+    
+  }, [Handle])
+  
+  const HandleClaim = async () => {
+    setClaimed(true)
+  }
   const addLinks = async () => {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -19,6 +58,7 @@ const Generate = () => {
       link: Links,
       handle: Handle,
       ProfilePic: Pfp,
+      created: false,
     });
 
     const requestOptions = {
@@ -74,16 +114,25 @@ const Generate = () => {
         <h1 className="text-4xl mt-44 font-bold">Create Your Linktree</h1>
         <div className="flex mt-10 flex-col gap-4">
           <h2 className="text-2xl">Step 1: Claim Your handle:</h2>
-          <div className="mx-12">
+          <div className=" flex gap-5 mx-12">
             <input
               className="p-2 rounded-lg w-80 text-black"
               type="text"
+              disabled={Claimed}
               name="handle"
               value={Handle}
               onChange={(e) => setHandle(e.target.value)}
               placeholder="Enter Your Handle"
             />
+            <button
+            onClick={HandleClaim}
+            disabled={Handle.length<=3 || Exists || Claimed}
+            className="font-bold py-2 px-6 disabled:opacity-50 bg-[#1e2330] valid:hover:bg-[#303541] rounded-full"
+          >
+            Clain Handel
+          </button>
           </div>
+          {Handle.length>3 && Exists?<p className="text-red-500 ml-20">Handel Exists</p> : null}
 
           <h2 className="text-2xl">Step 2: Enter your Links:</h2>
           <div className="flex gap-4">
