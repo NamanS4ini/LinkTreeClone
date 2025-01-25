@@ -21,3 +21,11 @@ export async function POST(req) {
 
     return Response.json({success:false, message:"Error"});
 }
+
+// export async function getUser(username) {
+//     const client = await clientPromise
+//     const db = client.db("LinkTree")
+//     const collection = db.collection("Links")
+//     const user = await collection.findOne({handel: username});
+//     return Response.json({success:true, data:user});
+// }

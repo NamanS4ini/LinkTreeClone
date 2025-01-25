@@ -181,7 +181,7 @@ const Generate = () => {
               disabled={Handle.length <= 3 || !Claimed}
               className=" px-6 py-2 font-bold h-fit self-center mt-4 disabled:opacity-50 bg-[#1e2330] valid:hover:bg-[#303541] rounded-full"
             >
-              Add More Links
+              Add Link
             </button>
           </div>
           <h2 className="text-2xl">Step 3: Add a Profile Picture:</h2>
