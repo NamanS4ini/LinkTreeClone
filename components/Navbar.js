@@ -6,7 +6,6 @@ const Navbar = () => {
         <div className='flex items-center gap-16'>
         <div>
             <Image width={120} height={120} src="logo.svg" alt="" />
-
         </div>
         <ul className='flex gap-4 text-gray-600'>
           <li className='hover:bg-[#e9e9e9] p-3 rounded-md'>Templates</li>
