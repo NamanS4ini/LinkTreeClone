@@ -11,7 +11,40 @@ const Generate = () => {
   const [Exists, setExists] = useState(false)
   const [Claimed, setClaimed] = useState(false)
   const handleSubmit = async () => {
-    console.log(Links);
+    console.log(Pfp);
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const raw = JSON.stringify({
+      link: Links,
+      handle: Handle,
+      ProfilePic: Pfp,
+    });
+
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    const result = await fetch(
+      "http://localhost:3000/api/generate",
+      requestOptions
+    );
+    const data = await result.json();
+    console.log(data.message);
+    toast.success(data.message, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      transition: Bounce,
+      });
   };
   const getUser = async () => {
     const myHeaders = new Headers();
@@ -51,30 +84,7 @@ const Generate = () => {
     setClaimed(true)
   }
   const addLinks = async () => {
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-
-    const raw = JSON.stringify({
-      link: Links,
-      handle: Handle,
-      ProfilePic: Pfp,
-      created: false,
-    });
-
-    const requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
-
-    const result = await fetch(
-      "http://localhost:3000/api/generate",
-      requestOptions
-    );
-    const data = await result.json();
-    console.log(data.message);
-    toast.success(data.message, {
+    toast.success("Link Added", {
       position: "top-right",
       autoClose: 5000,
       hideProgressBar: false,
@@ -163,8 +173,10 @@ const Generate = () => {
             
           })}
           </div>
-            <button onClick={addLinks} className=" px-6 py-2 font-bold h-fit self-end  bg-[#1e2330] hover:bg-[#303541] rounded-full">
-              Add Link
+            <button onClick={addLinks}
+            disabled={Handle.length<=3 || !Claimed}
+            className=" px-6 py-2 font-bold h-fit self-center mt-4 disabled:opacity-50 bg-[#1e2330] valid:hover:bg-[#303541] rounded-full">
+              Add More Links
             </button>
           </div>
           <h2 className="text-2xl">Step 3: Add a Profile Picture:</h2>
@@ -172,7 +184,7 @@ const Generate = () => {
             <input
               className="p-2 rounded-lg w-80 text-black"
               type="text"
-              name="pfp"
+              name="Pfp"
               value={Pfp}
               onChange={
                 (e) => setPfp(e.target.value)
@@ -184,7 +196,8 @@ const Generate = () => {
         <div className="w-full flex mt-5 mr-32 justify-center">
           <button
             onClick={handleSubmit}
-            className="font-bold  py-4 px-10 bg-[#1e2330] hover:bg-[#303541] rounded-full"
+            disabled={Handle.length<=3 || !Claimed || Links.length<=1 || Pfp.length<=1}
+            className="font-bold  py-4 px-10 disabled:opacity-50 bg-[#1e2330] valid:hover:bg-[#303541] rounded-full"
           >
             Create
           </button>
